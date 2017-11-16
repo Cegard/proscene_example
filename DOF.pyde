@@ -44,6 +44,7 @@ def setup():
     
     srcPGraphics = createGraphics(width, height, P3D)
     scene = Scene(this, srcPGraphics)
+    print(this)
     
     for i in xrange(100):
         i_frame = InteractiveFrame(scene, boxShape())
@@ -69,7 +70,7 @@ def setup():
 
 
 def draw():
-    global scene, depthPGraphics, dofPGraphics, dofShader
+    global scene, depthPGraphics, dofPGraphics, dofShader, models
     
     # 1. Draw into main buffer
     scene.beginDraw()
@@ -89,7 +90,7 @@ def draw():
     dofShader.set("tDepth", depthPGraphics)
     dofPGraphics.image(scene.pg(), 0, 0)
     dofPGraphics.endDraw()
-    
+    print(scene.X)
     # display one of the 3 buffers
     if mode == 0 :
         scene.display()
@@ -102,10 +103,30 @@ def draw():
 
 
 def boxShape():
+    #box = PShape()
     box = createShape(BOX, 60)
     box.setFill(color(random(0,255), random(0,255), random(0,255)))
     
     return box
+
+
+def generator_point_line_distance(line_start, line_end):
+    v0 = line_end - line_start
+    denominator = v0.mag()
+    
+    def point_line_distance(position):
+        point_in_space = PVector(position[0], position[1], 
+                                 position[2])
+        v1 = point_in_space - line_start
+        v2 = point_in_space - line_end
+        v3 = v1.cross(v2)
+        numerator = v3.mag()
+        result = numerator/denominator
+        
+        return result
+    
+    
+    return point_line_distance
 
 
 def keyPressed():
