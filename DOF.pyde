@@ -90,7 +90,7 @@ def draw():
     dofShader.set("tDepth", depthPGraphics)
     dofPGraphics.image(scene.pg(), 0, 0)
     dofPGraphics.endDraw()
-    print(scene.X)
+    
     # display one of the 3 buffers
     if mode == 0 :
         scene.display()
@@ -103,7 +103,6 @@ def draw():
 
 
 def boxShape():
-    #box = PShape()
     box = createShape(BOX, 60)
     box.setFill(color(random(0,255), random(0,255), random(0,255)))
     
