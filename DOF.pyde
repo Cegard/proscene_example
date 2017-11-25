@@ -21,9 +21,6 @@ None, None, None
 # Scene
 scene = None
 
-# float
-posns = []
-
 # InteractiveFrame[]
 models = []
 
@@ -31,24 +28,21 @@ mode = 2
 
 
 def setup():
-    global posns, srcPGraphics, scene, models, depthShader, \
+    global srcPGraphics, scene, models, depthShader, \
         dofShader, depthPGraphics, dofPGraphics
     
     size(900, 900, P3D);
     colorMode(HSB, 255);
-    
-    for i in xrange(0, 300, 3):
-        posns.append(random(-1000, 1000))
-        posns.append(random(-1000, 1000))
-        posns.append(random(-1000, 1000))
-    
     srcPGraphics = createGraphics(width, height, P3D)
     scene = Scene(this, srcPGraphics)
-    print(this)
     
-    for i in xrange(100):
+    for i in xrange(0, 100):
+        x = random(-1000, 1000)
+        y = random(-1000, 1000)
+        z = random(-1000, 1000)
+        
         i_frame = InteractiveFrame(scene, boxShape())
-        i_frame.translate(posns[3*i], posns[3*i+1], posns[3*i+2])
+        i_frame.translate(x, y, z)
         models.append(i_frame)
     
     scene.setRadius(1000)
@@ -109,33 +103,7 @@ def boxShape():
     return box
 
 
-def generator_point_line_distance(line_start, line_end):
-    v0 = line_end - line_start
-    denominator = v0.mag()
-    
-    def point_line_distance(position):
-        point_in_space = PVector(position[0], position[1], 
-                                 position[2])
-        v1 = point_in_space - line_start
-        v2 = point_in_space - line_end
-        v3 = v1.cross(v2)
-        numerator = v3.mag()
-        result = numerator/denominator
-        
-        return result
-    
-    
-    return point_line_distance
-
-
 def keyPressed():
     global mode
     
-    if key == '0':
-        mode = 0
-    
-    elif key == '1':
-        mode = 1  
-    
-    elif key == '2':
-        mode = 2
+    mode = int(key) - 1 if key in ('1', '2', '3') else mode
